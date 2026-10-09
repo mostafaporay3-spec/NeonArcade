@@ -24,7 +24,9 @@ Actual memory availability and peripheral compatibility depend on the specific E
 
 NeonArcade includes 14 games:
 
-1. **Snake** — Classic snake gameplay. <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/69cad504-2ac0-4ed3-95c3-f9a2e1999ed5" />
+1. **Snake** — Classic snake gameplay.
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/69cad504-2ac0-4ed3-95c3-f9a2e1999ed5" />
 
 2. **Breakout** — Paddle-and-brick arcade action.
 3. **Flappy** — Timing-based obstacle avoidance.
@@ -32,9 +34,16 @@ NeonArcade includes 14 games:
 5. **Starfire** — A space shooter featuring stages, enemies, bosses, shields, weapon upgrades, and bombs.
 6. **Tetris** — Falling-block puzzle gameplay.
 7. **Pong** — Paddle-based ball gameplay.
-8. **Racer 3D** — A pseudo-3D racing game featuring curved roads, traffic, nitro, and a car garage.
+8. **Racer 3D** — A pseudo-3D racing game featuring curved roads, traffic, nitro, and a car garage. 
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0b06fac5-b356-4db3-bcda-44da1dc1f1da" />
+
+
+
 9. **Nightmare** — A horror-themed survival game.
 10. **Asteroids** — Space combat with rotation, thrust, shooting, and asteroid splitting.
+
+
 11. **Craft 3D** — A block-based world featuring terrain, caves, water, materials, trees, animals, and day/night transitions.
 12. **Hide & Seek** — A 3D-style horror game involving exploration and avoiding an enemy.
 13. **Anomaly** — A horror experience built around identifying environmental anomalies.
@@ -210,3 +219,14 @@ Features and hardware compatibility may change as the project evolves.
 ## License
 
 No license has been selected for this repository yet.
+
+
+
+<img width="580" height="580" alt="image" src="https://github.com/user-attachments/assets/e553b9c8-cc23-460f-91c3-788cc0e0cdc6" />
+
+
+<img width="600" height="600" alt="image" src="https://github.com/user-attachments/assets/5892fa1b-34f6-457d-a7fc-ed0cf5bc8d60" />
+
+
+
+<img width="1000" height="1000" alt="image" src="https://github.com/user-attachments/assets/fdb01a90-a67f-4fda-9a03-10168d90dc24" />
