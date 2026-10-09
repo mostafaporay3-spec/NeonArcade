@@ -1,6 +1,3 @@
-// ===================== NEON ARCADE v4  |  ESP32-S3 N16R8 =====================
-// v4: Neon Dash طبق الأصل من GD (بدون وميض) | جراج عربيات + عملات + BMW M3 GTR | CRAFT 3D (عالم مفتوح)
-//     HIDE&SEEK 3D | ANOMALY (رعب) | LOST ROAD (رعب + قصة + سلندرمان) | قصص افتتاحية | حفظ تلقائي
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -19,8 +16,7 @@
 #define ST77XX_GRAY 0x7BEF
 #endif
 
-// ---------- أنواع تُستخدم كوسائط دوال (لازم تسبق أي دالة) ----------
-struct Step { uint16_t f0, f1, ms; uint8_t vol, mod; };   // f1=0 يعني نفس التردد | mod: 1 اهتزاز 2 خشن 3 رعشة
+struct Step { uint16_t f0, f1, ms; uint8_t vol, mod; }; 
 struct RcCar { float z, lx, sp; uint16_t col; bool on, pass; };
 struct RcCoin { float z, lx; bool on; };
 struct CarSpec { const char *nm; uint16_t body, dark, accent, price; float spd, acc, hnd, nit; uint8_t kind; };
@@ -34,7 +30,7 @@ typedef uint8_t (*ShapeFn)(float, float);
 typedef uint16_t (*ColFn)(uint8_t, int);
 struct FpsV { const uint8_t *m; int w, h; float x, y, a; int hz, amb, famb; float fk, wh; WallFn wf; const uint16_t *cl, *fl; uint16_t fog; int fogK; bool ccone; };
 
-// ---------- الأرجل ----------
+
 #define OLED_CLK 14
 #define OLED_MOSI 13
 #define OLED_RESET 12
@@ -43,7 +39,7 @@ struct FpsV { const uint8_t *m; int w, h; float x, y, a; int hz, amb, famb; floa
 SPIClass spiOLED(FSPI);
 Adafruit_SSD1306 oled(128, 64, &spiOLED, OLED_DC, OLED_RESET, OLED_CS);
 
-// شاشة OLED ثنائية اللون: الصفوف 0..15 صفراء، من 16 لتحت زرقاء
+
 #define OLED_BLUE_Y 16
 
 #define TFT_CS 16
@@ -64,7 +60,7 @@ TFTX tft(&spiTFT, TFT_CS, TFT_DC, TFT_RST);
 #define BUZZER_PIN 1
 #define BATTERY_PIN 18
 
-// ---------- الإضاءة (PWM) متوافق مع core 2.x و 3.x ----------
+
 #if ESP_ARDUINO_VERSION_MAJOR >= 3
   #define BL_INIT()   ledcAttach(TFT_BL, 5000, 8)
   #define BL_WRITE(v) ledcWrite(TFT_BL, v)
@@ -75,13 +71,13 @@ TFTX tft(&spiTFT, TFT_CS, TFT_DC, TFT_RST);
   #define BL_DETACH() ledcDetachPin(TFT_BL)
 #endif
 
-// ---------- الأساسيات ----------
+
 #define SW 128
 #define SH 128
 #define RGB(r,g,b) ((uint16_t)((((r)&0xF8)<<8)|(((g)&0xFC)<<3)|((b)>>3)))
 #define C_K 0x0000
 #define C_W 0xFFFF
-class Canv : public Adafruit_GFX {   // كانفس في الرام الداخلية السريعة (مش PSRAM)
+class Canv : public Adafruit_GFX {   
  public:
   uint16_t *buf;
   Canv(int16_t w, int16_t h) : Adafruit_GFX(w, h) {
@@ -127,7 +123,7 @@ bool rawH[8], rawP[8], held[8], prs[8], rpt[8];
 float holdT[8];
 uint32_t lastAct = 0;
 
-// ---------- الإعدادات المحفوظة ----------
+
 struct Cfg {
   uint32_t magic;
   uint8_t bl, oledC, sound, vol, music, hud, sleepIdx, wakeIdx, cpuIdx, spiIdx;
@@ -185,8 +181,7 @@ void storyDraw();
 void svMenuDraw(const char *title, const char *info);
 void lutInit();
 
-// ======================= محرك الصوت (ناعم + موسيقى هادية) =======================
-// بنستخدم LEDC مباشرة: دوتي منخفض = صوت أنعم، وإنفلوب (attack/release) + انزلاق في التردد
+
 #define SQN 48
 Step sq[SQN]; volatile uint8_t sqH = 0, sqT = 0;
 Step curStep; uint32_t stepT0 = 0;
@@ -263,7 +258,7 @@ void audioOut(float f, float v) {
   if (d && fabsf(f - lastF) >= 1.0f) { ledc_set_freq(LEDC_LOW_SPEED_MODE, LEDC_TIMER_3, (uint32_t)f); lastF = f; }
   if (d != aoLastD) { ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_7, d); ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_7); aoLastD = d; }
 }
-// وضع السماعة: تركيب عينات حقيقي (أكتر من صوت + هارمونكس + نويز + صدى) وإرساله DMA
+
 void spkBlock() {
   static int16_t buf[SPK_N]; static uint32_t phA = 0, phB = 0, rng = 2463534242u; static float nz = 0, stEl = 0, mT = 0, mf = 0; static int mi = 0; static bool mNew = true;
   portENTER_CRITICAL(&amux);
@@ -439,7 +434,7 @@ void starsDraw(float mult) {
   }
 }
 
-// ---------- الإدخال (مع التخصيص) ----------
+
 void readInput(float dt) {
   bool any = false;
   for (int i = 0; i < 8; i++) { bool d = digitalRead(PIN_BTN[i]) == LOW; rawP[i] = d && !rawH[i]; rawH[i] = d; if (d) any = true; }
@@ -451,7 +446,7 @@ void readInput(float dt) {
   if (any) lastAct = millis();
 }
 
-// ======================= البطارية والحرارة (خوارزمية مفلترة) =======================
+
 const float VT[21] = {3.27, 3.61, 3.69, 3.71, 3.73, 3.75, 3.77, 3.79, 3.80, 3.82, 3.84, 3.85, 3.87, 3.91, 3.95, 3.98, 4.02, 4.08, 4.11, 4.15, 4.20};
 const uint8_t PT[21] = {0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
 int pctFromV(float v) {
@@ -464,7 +459,7 @@ static void sortF(float *a, int n) { for (int i = 1; i < n; i++) { float k = a[i
 
 void readSensors() {
   uint32_t now = millis();
-  // ---- البطارية: 32 عينة -> ترتيب -> متوسط الوسط -> رفض القفزات -> فلتر بطيء -> نسبة محدودة السرعة ----
+ 
   {
     uint16_t sm[32];
     for (int i = 0; i < 32; i++) { sm[i] = analogReadMilliVolts(BATTERY_PIN); delayMicroseconds(120); }
@@ -500,7 +495,7 @@ void readSensors() {
     static uint32_t lowSince = 0;
     if (!noBat && batSm < 3.25f) { if (!lowSince) lowSince = now; else if (now - lowSince > 8000) reqSleep = true; } else lowSince = 0;
   }
-  // ---- الحرارة: 24 قراءة -> ترتيب -> متوسط الوسط -> فلتر تكيفي -> عرض بنصف درجة مع هستيرسيس ----
+ 
   {
     float tb[24];
     for (int i = 0; i < 24; i++) { tb[i] = temperatureRead(); delayMicroseconds(250); }
@@ -523,7 +518,7 @@ void applyBL() {
   BL_WRITE((p * p * 255) / 10000);
 }
 
-// ---------- TFT: إزاحة + مسح الـGRAM + الإرسال على Core 0 ----------
+
 void clearGRAM() {
   uint8_t c[4] = {0, 0, 0, 131}, r[4] = {0, 0, 0, 161};
   tft.sendCommand(ST77XX_CASET, c, 4); tft.sendCommand(ST77XX_RASET, r, 4); tft.sendCommand(ST77XX_RAMWR);
@@ -559,8 +554,7 @@ void present() {
   xSemaphoreGive(semGo);
 }
 
-// ======================= الألعاب =======================
-// ---------- 1) SNAKE (زرارين بس: يسار / يمين نسبةً لاتجاه الثعبان + حركة سلسة) ----------
+
 #define SN_W 16
 #define SN_H 14
 int8_t snx[SN_W * SN_H], sny[SN_W * SN_H], spx[SN_W * SN_H], spy[SN_W * SN_H];
@@ -625,7 +619,7 @@ void snDraw() {
   }
 }
 
-// ---------- 2) BREAKOUT ----------
+
 float bkx, bkbx, bkby, bkvx, bkvy, bkSp; bool bkStuck; uint8_t bkBr[5][8]; int bkLeft, bkLvl;
 const uint16_t bkCol[5] = {RGB(255, 60, 90), RGB(255, 150, 40), RGB(255, 230, 60), RGB(70, 230, 110), RGB(60, 170, 255)};
 void bkReset() { for (int r = 0; r < 5; r++) for (int c = 0; c < 8; c++) bkBr[r][c] = (r == 0) ? 2 : 1; bkLeft = 40; bkStuck = true; }
@@ -730,7 +724,7 @@ void fDraw() {
   if (!fStart) txtC("A: FLAP", 84, RGB(255, 255, 255));
 }
 
-// ---------- 4) NEON DASH (طبق الأصل من Geometry Dash: خلفية زرقاء ثابتة + بلوكات سودا بحدود بيضا + بدون أي وميض) ----------
+
 #define RGY 100
 #define RB 12
 #define RPX 28
@@ -738,8 +732,7 @@ void fDraw() {
 #define RSPD 115.0f
 #define GD_BGT RGB(24, 120, 255)
 #define GD_BGB RGB(8, 62, 205)
-// . فاضي | ^ سبايك | # $ % بلوك ارتفاع 1/2/3 | p بَد قفز | o O أوربة (O فوق حفرة) | _ حفرة
-// S بوابة سفينة | C بوابة مكعب | u U بلوك معلق (سفينة) | d D بلوك قائم (سفينة) | W خط النهاية
+
 const char RLV[] =
   "............"
   "^.......^.......^^......^^^........"
@@ -854,7 +847,7 @@ void gdOrb(int c, int x) {
   cv.drawCircle(ox, oy, 6, oc); cv.drawCircle(ox, oy, 5, oc); cv.fillCircle(ox, oy, 2, u ? RGB(160, 160, 100) : C_W);
 }
 void rDraw() {
-  // خلفية زرقاء ثابتة (تدرج) + مربعات بعيدة بتتحرك ببطء (Parallax)
+ 
   vgrad(0, RGY, GD_BGT, GD_BGB);
   int off = (int)(rdist * 0.15f), ts = 26;
   for (int j = 0; j * ts < RGY; j++) for (int i = -1; i <= SW / ts + 1; i++) {
