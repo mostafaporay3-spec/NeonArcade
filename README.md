@@ -24,7 +24,8 @@ Actual memory availability and peripheral compatibility depend on the specific E
 
 NeonArcade includes 14 games:
 
-1. **Snake** — Classic snake gameplay.
+1. **Snake** — Classic snake gameplay. <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/69cad504-2ac0-4ed3-95c3-f9a2e1999ed5" />
+
 2. **Breakout** — Paddle-and-brick arcade action.
 3. **Flappy** — Timing-based obstacle avoidance.
 4. **Neon Dash** — Fast-paced neon platform gameplay.
